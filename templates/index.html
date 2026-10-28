@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeatherHub Dashboard</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+
+    <aside class="sidebar">
+      <a href="#" class="brand">
+        <span class="brand-icon">🌤️</span>
+        <span><strong>WeatherHub</strong><small>Explore Weather Worldwide</small></span>
+      </a>
+
+      <nav class="side-nav">
+        <a class="nav-link active" href="#home"><i class="bi bi-house-fill"></i> Home</a>
+        <a class="nav-link" href="#current"><i class="bi bi-cloud-sun-fill"></i> Current Weather</a>
+        <a class="nav-link" href="#forecast"><i class="bi bi-calendar-week"></i> 5-Day Forecast</a>
+        <a class="nav-link" href="#favorites"><i class="bi bi-heart-fill"></i> Favourite Cities</a>
+        <a class="nav-link" href="#about"><i class="bi bi-info-circle-fill"></i> About</a>
+      </nav>
+
+      <div class="sidebar-art" aria-hidden="true">
+        <div class="earth">🌎</div>
+        <p>“Better Weather<br>Better Days”</p>
+      </div>
+    </aside>
+
+    <main class="main-area" id="home">
+      <header class="topbar">
+        <form id="searchForm" class="search-form">
+          <i class="bi bi-geo-alt-fill location-icon"></i>
+          <input id="cityInput" type="text" value="Vijayawada"
+                 placeholder="Enter city name" aria-label="City name" required>
+          <select id="countryInput" aria-label="Country code">
+            <option value="IN" selected>IN</option>
+            <option value="US">US</option>
+            <option value="GB">GB</option>
+            <option value="JP">JP</option>
+            <option value="AU">AU</option>
+            <option value="CA">CA</option>
+          </select>
+          <button class="primary-btn" type="submit">
+            <i class="bi bi-search"></i> Search
+          </button>
+        </form>
+
+        <div class="topbar-actions">
+          <button id="themeToggle" class="theme-toggle" type="button"
+                  aria-label="Toggle light and dark theme">
+            <span>☀️</span><span>🌙</span>
+          </button>
+          <div class="clock"><span id="todayDate">Loading date...</span><strong id="todayTime">--:--</strong></div>
+        </div>
+      </header>
+
+      <div id="statusMessage" class="status-message" role="status" aria-live="polite"></div>
+
+      <div class="dashboard-grid">
+        <section class="center-column">
+
+          <article class="hero-weather panel" id="current">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+              <div class="live-pill"><span></span> Live Weather</div>
+              <div class="location-line">
+                <div>
+                  <h1 id="weatherCity">Vijayawada, <small>IN</small></h1>
+                  <p id="weatherLocation"><i class="bi bi-geo-alt-fill"></i> Loading location...</p>
+                </div>
+              </div>
+              <p id="weatherDate" class="weather-date">Fetching weather...</p>
+              <div class="temperature-line">
+                <span id="temperature">--</span><span class="degree">°C</span>
+              </div>
+              <p id="weatherDescription" class="weather-description">Waiting for weather data</p>
+              <div class="feels-line"><i class="bi bi-thermometer-half"></i>
+                Feels like <strong id="heroFeels">--°C</strong>
+              </div>
+            </div>
+            <div class="hero-icon" id="heroIcon">🌤️</div>
+          </article>
+
+          <div class="stats-grid">
+            <article class="stat-card stat-feels">
+              <i class="bi bi-thermometer-half"></i>
+              <span>Feels Like</span><strong id="statFeels">--°C</strong>
+            </article>
+            <article class="stat-card stat-humidity">
+              <i class="bi bi-droplet"></i>
+              <span>Humidity</span><strong id="statHumidity">--%</strong>
+            </article>
+            <article class="stat-card stat-wind">
+              <i class="bi bi-wind"></i>
+              <span>Wind Speed</span><strong id="statWind">-- m/s</strong>
+            </article>
+            <article class="stat-card stat-pressure">
+              <i class="bi bi-speedometer2"></i>
+              <span>Pressure</span><strong id="statPressure">-- hPa</strong>
+            </article>
+            <article class="stat-card stat-visibility">
+              <i class="bi bi-eye"></i>
+              <span>Visibility</span><strong id="statVisibility">-- km</strong>
+            </article>
+          </div>
+
+          <section class="panel forecast-panel" id="forecast">
+            <div class="section-heading">
+              <h2><i class="bi bi-calendar-week"></i> 5-Day Weather Forecast</h2>
+              <span id="forecastCityLabel" class="subtle-label"></span>
+            </div>
+            <div id="forecastGrid" class="forecast-grid">
+              <div class="empty-state">Loading forecast...</div>
+            </div>
+          </section>
+
+          <section class="panel about-panel" id="about">
+            <h2><i class="bi bi-info-circle"></i> About WeatherHub</h2>
+            <p>WeatherHub displays current weather, upcoming forecasts and your saved favourite cities.</p>
+          </section>
+        </section>
+
+        <aside class="right-column">
+          <section class="panel favorites-panel" id="favorites">
+            <div class="section-heading">
+              <h2><i class="bi bi-heart-fill heart-icon"></i> Favourite Cities</h2>
+              <button id="addFavoriteBtn" class="small-primary" type="button">
+                <i class="bi bi-plus-lg"></i> Add City
+              </button>
+            </div>
+            <div id="favoritesList">
+              <div class="empty-state">Loading favourite cities...</div>
+            </div>
+            <button id="viewFavoritesBtn" class="view-all-btn" type="button">
+              View All Favourite Cities <i class="bi bi-arrow-right"></i>
+            </button>
+          </section>
+
+          <section class="panel world-panel">
+            <div class="section-heading">
+              <h2><i class="bi bi-globe2 globe-icon"></i> Weather Around the World</h2>
+            </div>
+            <p class="world-note">Live weather for selected cities</p>
+            <div id="worldCities">
+              <div class="empty-state">Loading world weather...</div>
+            </div>
+          </section>
+        </aside>
+      </div>
+
+      <footer class="footer">WeatherHub · Weather information powered by OpenWeather</footer>
+    </main>
+  </div>
+
+  <div class="toast-message" id="toastMessage" role="status" aria-live="polite"></div>
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>
